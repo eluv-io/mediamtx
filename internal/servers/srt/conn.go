@@ -72,6 +72,9 @@ type conn struct {
 	pathName  string
 	query     string
 	sconn     srt.Conn
+
+	// PENDING(SS)
+	defStreamId string
 }
 
 func (c *conn) initialize() {
@@ -123,8 +126,16 @@ func (c *conn) run() { //nolint:dupl
 }
 
 func (c *conn) runInner() error {
+
 	var streamID streamID
-	err := streamID.unmarshal(c.connReq.StreamId())
+
+	// PENDING(SS) Set default stream ID
+	s := c.connReq.StreamId()
+	if s == "" {
+		s = c.defStreamId
+	}
+
+	err := streamID.unmarshal(s)
 	if err != nil {
 		c.connReq.Reject(srt.REJ_PEER)
 		return fmt.Errorf("invalid stream ID '%s': %w", c.connReq.StreamId(), err)

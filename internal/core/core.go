@@ -82,6 +82,7 @@ type Core struct {
 	hlsServer       *hls.Server
 	webRTCServer    *webrtc.Server
 	srtServer       *srt.Server
+	srtServer2      *srt.Server
 	api             *api.API
 	confWatcher     *confwatcher.ConfWatcher
 
@@ -603,6 +604,29 @@ func (p *Core) createResources(initial bool) error {
 		if p.metrics != nil {
 			p.metrics.SetSRTServer(p.srtServer)
 		}
+	}
+
+	// PENDING(SS) Make a second SRT server
+	if p.conf.SRT &&
+		p.srtServer2 == nil {
+		i := &srt.Server{
+			Address:             p.conf.SRTAddress2,
+			RTSPAddress:         p.conf.RTSPAddress,
+			ReadTimeout:         p.conf.ReadTimeout,
+			WriteTimeout:        p.conf.WriteTimeout,
+			UDPMaxPayloadSize:   p.conf.UDPMaxPayloadSize,
+			RunOnConnect:        p.conf.RunOnConnect,
+			RunOnConnectRestart: p.conf.RunOnConnectRestart,
+			RunOnDisconnect:     p.conf.RunOnDisconnect,
+			ExternalCmdPool:     p.externalCmdPool,
+			PathManager:         p.pathManager,
+			Parent:              p,
+		}
+		err = i.Initialize()
+		if err != nil {
+			return err
+		}
+		p.srtServer2 = i
 	}
 
 	if p.conf.API &&

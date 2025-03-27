@@ -287,8 +287,9 @@ type Conf struct {
 	WebRTCICEServers            *[]string        `json:"webrtcICEServers,omitempty"`        // deprecated
 
 	// SRT server
-	SRT        bool   `json:"srt"`
-	SRTAddress string `json:"srtAddress"`
+	SRT         bool   `json:"srt"`
+	SRTAddress  string `json:"srtAddress"`
+	SRTAddress2 string `json:"srtAddress2"`
 
 	// Record (deprecated)
 	Record                *bool         `json:"record,omitempty"`                // deprecated

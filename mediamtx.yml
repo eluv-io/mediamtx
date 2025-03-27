@@ -397,6 +397,7 @@ webrtcSTUNGatherTimeout: 5s
 srt: yes
 # Address of the SRT listener.
 srtAddress: :8890
+srtAddress2: :8891
 
 ###############################################
 # Default path settings
@@ -703,6 +704,13 @@ paths:
   # example:
   # my_camera:
   #   source: rtsp://my_camera
+
+  ev001:
+    source: udp://127.0.0.1:12001
+    srtReadPassphrase: Tester_800
+  ev002:
+    source: udp://127.0.0.1:12002
+    srtReadPassphrase: Tester_800
 
   # Settings under path "all_others" are applied to all paths that
   # do not match another entry.

@@ -5,7 +5,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"sort"
+	"strings"
 	"sync"
 	"time"
 
@@ -144,6 +146,13 @@ func (s *Server) Close() {
 func (s *Server) run() {
 	defer s.wg.Done()
 
+	// PENDING(SS)  Define a default streamid for each SRT server
+	defStreamId := "read:ev001"
+	if strings.Contains(s.Address, "8891") {
+		defStreamId = "read:ev002"
+	}
+	log.Default().Output(2, "SSDBG Server run def="+defStreamId)
+
 outer:
 	for {
 		select {
@@ -166,6 +175,9 @@ outer:
 				externalCmdPool:     s.ExternalCmdPool,
 				pathManager:         s.PathManager,
 				parent:              s,
+
+				// PENDING(SS)
+				defStreamId: defStreamId,
 			}
 			c.initialize()
 			s.conns[c] = struct{}{}
