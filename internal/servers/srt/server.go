@@ -148,7 +148,7 @@ func (s *Server) run() {
 
 	// PENDING(SS)  Define a default streamid for each SRT server
 	defStreamId := "read:ev001"
-	if strings.Contains(s.Address, "8891") {
+	if strings.Contains(s.Address, "8891") || strings.Contains(s.Address, "11002") {
 		defStreamId = "read:ev002"
 	}
 	log.Default().Output(2, "SSDBG Server run def="+defStreamId)
